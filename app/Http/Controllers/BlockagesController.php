@@ -62,42 +62,48 @@ class BlockagesController extends Controller
         return $data;
     }
 
-    // update new user click management 
-    function insert_selection($id_user, $type_msg, $text_msg){
+    // ------------- user logs effect to line ------------- // 
+
+    // update new user click management //
+    function insert_selection($id_user, $type_msg, $text_msg, $timestamp){
         DB::table('reply_msg')
         ->insert([
             'id_user' => $id_user,
             'type_msg' => $type_msg,
-            'text_msg' => $text_msg
+            'text_msg' => $text_msg,
+            'timestamp' => $timestamp
             ]);
     }
 
-    // find user click management 
-    function count_log($id_user){
-        $data = DB::table('reply_msg')
-        ->select(DB::raw('count(*) as user_count'))
-        ->where('id_user','=',$id_user)
-        ->get();
-        return $data;
-    }
+    // find user click management //
+    // function count_log($id_user){
+    //     $data = DB::table('reply_msg')
+    //     ->select(DB::raw('count(*) as user_count'))
+    //     ->where('id_user','=',$id_user)
+    //     ->get();
+    //     return $data;
+    // }
 
-    // update user click management
-    function update_log($id_user, $text_msg){
-        DB::table('reply_msg')
-        ->where('id_user',$id_user)
-        ->update(array('text_msg' => $text_msg));
-    }
+    // update user click management //
+    // function update_log($id_user, $text_msg){
+    //     DB::table('reply_msg')
+    //     ->where('id_user',$id_user)
+    //     ->update(array('text_msg' => $text_msg));
+    // }
 
-    // find user selection menu 
+    
+    // find user selection menu //
     function menu_selection($id_user){
         $data = DB::table('reply_msg')
         ->where('id_user','=',$id_user)
-        ->orderBy('collect_id','desc')
+        ->orderBy('timestamp','desc')
         ->limit(1)
         ->get(columns:['text_msg']);
 
         return $data;
     }
+
+    // -------------  ------------- ------------- // 
     
     function solution_mockup($id_location){
         $data = DB::table('mockup_solution')
@@ -106,10 +112,11 @@ class BlockagesController extends Controller
         return $data;
     }
 
-// สถานที่เเจ้งปัญหา
-    function report_promble($tumbol){
-        $data = DB::table('mockup_problem_report')
+    // สถานที่เเจ้งปัญหา //
+    function report_promble($aumpol,$tumbol){
+        $data = DB::table('problem_report')
         ->where('tumbol', '=', $tumbol)
+        ->where('aumpol', '=', $aumpol)
         ->limit(1)
         ->get();
         return $data;
